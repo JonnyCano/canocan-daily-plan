@@ -1,3 +1,5 @@
+// persistent data object
+var dailyPlansObj = {};
 // current time in moment
 var rightNow = moment();
 // current hour
@@ -62,6 +64,20 @@ var createTimeBlocks = function(id) {
 
     // append the form to the container
     timeBlockContainer.append(formEl);
+};
+
+var loadDailyPlans = function(tracker, userText) {
+    dailyPlansObj = JSON.parse(localStorage.getItem("dailyPlansObj"));
+
+    // if nothing stored in localStorage, create a new object to track all plans
+    if (!dailyPlanskObj) {
+        dailyPlansObj = {
+            id: tracker,
+            userPlan: userText
+        }
+    }
+
+    // loop over object properties
 };
 
 var timeBlocks = function() {
