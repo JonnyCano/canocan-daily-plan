@@ -2,6 +2,12 @@ body {
     font-family: 'Open Sans', sans-serif;
     font-size: 16px;
     line-height: 1;
+    margin-bottom: 1vh;
+}
+
+h2 {
+    margin-bottom: 0;
+
 }
 
 textarea{
@@ -27,13 +33,14 @@ textarea{
 
 .time-block{
     text-align: center;
-    border-radius: 15px;
+    border-radius: 0px, 0px, 15px, 15px;
 }
 
 .row {
     white-space: pre-wrap;
     height: 80px;
-    border-top: 1px solid white;;
+    border-top: 1px solid white;
+    margin-bottom: 6px;
 }
 
 .hour {
@@ -44,22 +51,20 @@ textarea{
 
 .past {
     background-color: #d3d3d3;
-    background-image: linear-gradient(45deg, #FFFFFF 0%, #a7b5b9 52%, #d3d3d3 90%);
+    background-image: linear-gradient(45deg, #FFFFFF 0%, #cfdce0 52%, #d3d3d3 90%);
     transition: all .5s ease-out;
-    background-size: 1px 100px;
+    background-size: 1px 90px;
     background-position: 0 -10px;
     color: white;
-    border-radius: 3vh;
+    border-bottom-right-radius: 14px;
 }
 
 .present {
     background-color: #ff6961;
-    background-image: linear-gradient(45deg, #FFFFFF 0%, #c45656 52%, #ff6961 90%);
+    background-image: linear-gradient(45deg, #ff6961 0%, #ff6961 52%, #ff6961 90%);
     transition: all .5s ease-out;
-    background-size: 1px 100px;
     background-position: 0 -10px;
-    color: white;
-    border-radius: 3vh;
+    color: black;
 }
 
 .future {
@@ -68,8 +73,8 @@ textarea{
     transition: all .5s ease-out;
     background-size: 1px 100px;
     background-position: 0 -10px;
-    color: white;
-    border-radius: 3vh;
+    color: black;
+    border-bottom-right-radius: 14px;
 }
 
 .saveBtn {
@@ -78,9 +83,104 @@ textarea{
     border-bottom-right-radius: 15px;
     background-color: #06AED5;
     color: white;
+    position: relative;
+    right: 0px;
+    box-shadow: -4px 2px 5px rgb(101, 210, 218);
 }
 
-.saveBtn i:hover {
+.saveBtn button {
+    padding-left: 5px;
+}
+
+.saveIcon img {
+    text-align: center;
+    height: 50%;
+    min-width: 20px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+
+img.saveIcon {
+    max-height: 50%;
+}
+
+.saveBtn img:hover {
     font-size: 20px;
     transition: all .3s ease-in-out;
+}
+
+@media only screen and (max-width: 768px) {
+    /* .display-3 {
+        font-size: 0.5rem;
+    } */
+}
+
+@media only screen and (max-width: 576px) {
+    h2.time-block {
+        font-size: 20px;
+        padding-left: 0px;
+    }
+    .col-9 {
+        max-width: 74%;
+    }
+    .saveIcon img {
+        height: 15px;
+    }
+    img.saveIcon {
+        height: 20px;
+        position: absolute;
+        left: 5px;
+        top: 24px;
+    }
+}
+
+@media only screen and (max-width: 575.9px) {
+    img.saveIcon {
+        height: 17px;
+        width: 64%;
+        top: 36%;
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .col-9 {
+        max-width: 76%;
+    }
+}
+
+@media only screen and (max-width: 375.5px) {
+    img.saveIcon {
+        position: absolute;
+        height: 18px;
+        right: 25%;
+        left: 0px;
+    }
+    .col-9 {
+        max-width: 74%;
+    }
+    h1.display-3 {
+        font-size: 3.5rem;
+    }
+    /* h2.col-2.time-block {
+        font-size: 15px;
+    } */
+}
+
+@media only screen and (max-width: 325px) {
+    .col-9 {
+        max-width: 73%;
+    }
+}
+
+@media only screen and (max-width: 295px) {
+    img.saveIcon {
+        left: 5px;
+    }
+}
+
+@media only screen and (max-width: 280px) {
+    .col-9 {
+        max-width: 71%;
+    }
 }
