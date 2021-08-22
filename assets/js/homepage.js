@@ -1,11 +1,5 @@
 // persistent data object
-var dailyPlansObj = {};
-// current time in moment
-var rightNow = moment();
-// current hour
-var hourNow = rightNow.format("h")
-// current hour in military time
-var hourNowMilitary = rightNow.format("k");
+var dailyPlansArr = [];
 
 // create a funtion using jQuery to  create and append the current date to the header section on page load
 var currentDateDisplay = function() {
@@ -13,13 +7,9 @@ var currentDateDisplay = function() {
     var marqueeDateTimeEl = $("p#currentDay");
     var dateTime = moment().format("dddd[,] MMMM Do");
 
-    // append and display to the user
+    // append to container and display to the user
     marqueeDateTimeEl.append(dateTime);
 }
-
-// * set classes to match the font in the header
-// * loop to fill the hours of the day with a condition to allow access to hours in the current day only using mom=nt.js
-// * format the date using moment.js syntax
 
 // create a function that will make time blocks
 var createTimeBlocks = function(id) {
@@ -42,17 +32,31 @@ var createTimeBlocks = function(id) {
     // append the icon to the buttonEl
     buttonEl.append(saveIconEl);
 
+    // use jQuery to set the textarea on click
+    buttonEl.on("click", function(event) {
+        // disable the button on click event
+        event.preventDefault();
+
+        // declare the target textarea contents
+        var userText = textAreaEl.val();
+
+        // send the textarea contents to the save function and call it
+        saveDailyPlans(id, userText);
+    })
+
     // check for the current time against the desired time-blocks/id and enable textarea if in the present and future
     if (moment().hour(id).isBefore(moment().local())) {
-        textAreaEl.addClass("past");
+        textAreaEl.addClass(`past ${id}`);
+        // disable the save button element
+        buttonEl.attr("disabled", true);
     }
-    else if (moment.hour(id).isAfter(moment().local())) {
-        textAreaEl.addClass("future");
+    else if (moment().hour(id).isAfter(moment().local())) {
+        textAreaEl.addClass(`future ${id}`);
         // enable the textarea element
         textAreaEl.removeAttr("disabled");
     }
     else {
-        textAreaEl.addClass("present");
+        textAreaEl.addClass(`present ${id}`);
         textAreaEl.removeAttr("disabled")
     }
 
@@ -66,23 +70,35 @@ var createTimeBlocks = function(id) {
     timeBlockContainer.append(formEl);
 };
 
-var loadDailyPlans = function(tracker, userText) {
-    dailyPlansObj = JSON.parse(localStorage.getItem("dailyPlansObj"));
+var loadDailyPlans = function(tracker) {
+    dailyPlansArr = JSON.parse(localStorage.getItem("dailyPlans"));
 
     // if nothing stored in localStorage, create a new object to track all plans
-    if (!dailyPlanskObj) {
-        dailyPlansObj = {
-            id: tracker,
-            userPlan: userText
-        }
-    }
+    if (!dailyPlansArr || moment().format("LT") === "12:00 AM") {
+        // refresh the localstorage every day
+        var emptyText = "";
+        dailyPlansArr[tracker] = [emptyText];
 
-    // loop over object properties
+        // save the new array
+        saveDailyPlans(tracker, emptyText);
+    }
+    // otherwise send the text contents in local storage to the document window
+    else {
+        $(`textarea.${tracker}`).text(dailyPlansArr[tracker]);
+    }
 };
 
+// this funtion saves the user's daily plans to localstorage
+var saveDailyPlans = function(id, userText) {
+    dailyPlansArr[id] = [userText];
+    localStorage.setItem("dailyPlans", JSON.stringify(dailyPlansArr));
+};
+
+// this function creates time blocks
 var timeBlocks = function() {
     for (let i = 9; i < 18; i++) {
-        createTimeBlocks(i)
+        createTimeBlocks(i);
+        loadDailyPlans(i)
     };
 };
 
