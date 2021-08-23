@@ -73,14 +73,9 @@ var createTimeBlocks = function(id) {
 var loadDailyPlans = function(tracker) {
     dailyPlansArr = JSON.parse(localStorage.getItem("dailyPlans"));
 
-    // if nothing stored in localStorage, create a new object to track all plans
+    // if nothing stored in localStorage and on new days set the stage
     if (!dailyPlansArr || moment().format("LT") === "12:00 AM") {
-        // refresh the localstorage every day
-        var emptyText = "";
-        dailyPlansArr[tracker] = [emptyText];
-
-        // save the new array
-        saveDailyPlans(tracker, emptyText);
+        $(`textarea.${tracker}`).text("");
     }
     // otherwise send the text contents in local storage to the document window
     else {
