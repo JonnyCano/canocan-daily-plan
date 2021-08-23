@@ -43,8 +43,9 @@ var createTimeBlocks = function(id) {
     // check for the current time against the desired time-blocks/id and enable textarea if in the present and future
     if (moment().hour(id).isBefore(moment().local())) {
         textAreaEl.addClass("past");
+        buttonEl.attr("disabled", true);
     }
-    else if (moment.hour(id).isAfter(moment().local())) {
+    else if (moment().hour(id).isAfter(moment().local())) {
         textAreaEl.addClass("future");
         // enable the textarea element
         textAreaEl.removeAttr("disabled");
@@ -64,6 +65,10 @@ var createTimeBlocks = function(id) {
     timeBlockContainer.append(formEl);
 };
 
+var saveTimeBlock = function() {
+    $("button").preventDefault();
+}
+
 var timeBlocks = function() {
     for (let i = 9; i < 18; i++) {
         createTimeBlocks(i)
@@ -74,3 +79,4 @@ var timeBlocks = function() {
 currentDateDisplay();
 // call the function to create the time blocks
 timeBlocks();
+saveTimeBlock();
