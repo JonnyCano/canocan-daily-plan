@@ -108,13 +108,9 @@ var saveDailyPlans = function(id, userText) {
 
 // this function creates time blocks after creating or loading localstorage item
 var timeBlocks = function() {
-    for (let i = 9; i < 18; i++) {
+    for (let i = 9; i < 24; i++) {
         createTimeBlocks(i);
     };
-    //refresh every day
-    if (moment().local().hour(0)) {
-        localStorage.removeItem("dailyPlans");
-    }
 };
 
 // call the function to display the current day
