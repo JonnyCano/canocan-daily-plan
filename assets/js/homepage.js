@@ -23,6 +23,13 @@ var createTimeBlocks = function(id) {
     var hourEl = $("<h2>").addClass("col-2 time-block");
     var textAreaEl = $("<textarea>").addClass("col-9 description");
 
+    loadDailyPlans(id).forEach(function(dailyPlan) {
+        if (id === dailyPlan.hour) {
+            dailyPlansArr.push(dailyPlan)
+            textAreaEl.text(textAreaEl.val(dailyPlan.plans));
+        }
+    })
+
     // disable the textarea attribute
     textAreaEl.attr("disabled", "true");
 
@@ -46,17 +53,17 @@ var createTimeBlocks = function(id) {
 
     // check for the current time against the desired time-blocks/id and enable textarea if in the present and future
     if (moment().hour(id).isBefore(moment().local())) {
-        textAreaEl.addClass(`past ${id}`);
+        textAreaEl.addClass("past").attr("id", id);
         // disable the save button element
         buttonEl.attr("disabled", true);
     }
     else if (moment().hour(id).isAfter(moment().local())) {
-        textAreaEl.addClass(`future ${id}`);
+        textAreaEl.addClass("future").attr("id", id);
         // enable the textarea element
         textAreaEl.removeAttr("disabled");
     }
     else {
-        textAreaEl.addClass(`present ${id}`);
+        textAreaEl.addClass("present").attr("id", id);
         textAreaEl.removeAttr("disabled")
     }
 
@@ -71,35 +78,43 @@ var createTimeBlocks = function(id) {
 };
 
 var loadDailyPlans = function(tracker) {
-    dailyPlansArr = JSON.parse(localStorage.getItem("dailyPlans"));
+    dailyPlans = JSON.parse(localStorage.getItem("dailyPlans"));
 
     // if nothing stored in localStorage, create a new object to track all plans
-    if (!dailyPlansArr || moment().format("LT") === "12:00 AM") {
+    if (!dailyPlans) {
         // refresh the localstorage every day
-        var emptyText = "";
-        dailyPlansArr[tracker] = [emptyText];
+        var dailyPlans = {
+            hour: tracker,
+            plans: ""
+        };
 
-        // save the new array
-        saveDailyPlans(tracker, emptyText);
+        dailyPlansArr.push(dailyPlans);
+        return dailyPlansArr;
     }
-    // otherwise send the text contents in local storage to the document window
-    else {
-        $(`textarea.${tracker}`).text(dailyPlansArr[tracker]);
-    }
+
+    console.log(dailyPlans);
+    return dailyPlans;
 };
 
 // this funtion saves the user's daily plans to localstorage
 var saveDailyPlans = function(id, userText) {
-    dailyPlansArr[id] = [userText];
+    dailyPlansArr.forEach(function(dailyPlan) {
+        if (id === dailyPlan.hour) {
+            dailyPlan.plans = userText;
+        }
+    })
     localStorage.setItem("dailyPlans", JSON.stringify(dailyPlansArr));
 };
 
-// this function creates time blocks
+// this function creates time blocks after creating or loading localstorage item
 var timeBlocks = function() {
     for (let i = 9; i < 18; i++) {
         createTimeBlocks(i);
-        loadDailyPlans(i)
     };
+    //refresh every day
+    if (moment().local().hour(0)) {
+        localStorage.removeItem("dailyPlans");
+    }
 };
 
 // call the function to display the current day
